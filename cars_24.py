@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
-
+import joblib
 
 
 st.title("Car Price Prediction App")
@@ -29,15 +29,20 @@ with col4:
     seats = st.selectbox("Seats", [2, 4, 5, 6, 7, 8, 9, 10])
 
 
-model = pickle.load(open("car_pred", "rb"))
+#model = pickle.load(open("car_pred", "rb"))
+#load model using joblib
+
+#model = joblib.load("cars24-car-price-model.joblib")
+
+model = pickle.load(open("cars24-car-price-model.pkl", "rb"))
 
 
 # with open("car_pred", "rb") as f:
 #     model = pickle.load(f)
-
 encode_dict={
     "fuel_type": {"Diesel": 1, "Petrol": 2, "CNG": 3, "LPG": 4, "Electric": 5},
-     "transmission": {"Manual": 1, "Automatic": 2}
+     "transmission_type": {"Manual": 1, "Automatic": 2},
+	 "seller_type": {"Dealer": 1, "Individual": 2, "Trustmark Dealer": 3}
 
      }
 
@@ -45,7 +50,7 @@ encode_dict={
 
 def model_pred(fuel_type, transmission_type, engine_power, seats):
     # create a dataframe
-    transmission_type = encode_dict["transmission"][transmission_type]
+    transmission_type = encode_dict["transmission_type"][transmission_type]
     fuel_type = encode_dict["fuel_type"][fuel_type]
 
 
